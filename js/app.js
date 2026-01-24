@@ -103,19 +103,16 @@ function participateLottery() {
 
     const btn = document.getElementById('lotteryBtn');
     const btnText = document.getElementById('btnText');
-    const btnIcon = document.getElementById('btnIcon');
 
     // 检查元素是否存在
-    if (!btn || !btnText || !btnIcon) {
+    if (!btn || !btnText) {
         console.error('按钮元素未找到');
         return;
     }
 
     // 显示加载状态
     btn.disabled = true;
-    btnText.textContent = '指令传输中...';
-    btnIcon.innerHTML = '',
-    btnIcon.classList.add('animate-spin');
+    btnText.textContent = '提交中...';
 
     const requestData = {
         jobNo: userInfo.jobNo,
@@ -146,26 +143,21 @@ function sendLotteryRequest(data) {
 function resetButton() {
     const btn = document.getElementById('lotteryBtn');
     const btnText = document.getElementById('btnText');
-    const btnIcon = document.getElementById('btnIcon');
 
     // 检查元素是否存在
-    if (!btn || !btnText || !btnIcon) {
+    if (!btn || !btnText) {
         console.error('按钮元素未找到');
         return;
     }
 
     if (hasParticipated) {
         btn.disabled = true;
-        btnText.textContent = '抽奖指令已确认';
-        btnIcon.innerHTML = `<path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="3" fill="none"/>`;
-        btnIcon.classList.remove('animate-spin');
+        btnText.textContent = '已参与成功';
         btn.classList.remove('btn-primary');
         btn.classList.add('bg-cyan-400/10', 'border-cyan-400/30', 'text-cyan-300');
     } else {
         btn.disabled = false;
-        btnText.textContent = '提交抽奖指令';
-        btnIcon.innerHTML = `<path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z"/><path d="M9 12l-4.5 4.5"/><path d="M14.5 4.5l3.5 3.5"/>`;
-        btnIcon.classList.remove('animate-spin');
+        btnText.textContent = '参与抽奖';
     }
 }
 
@@ -184,7 +176,7 @@ function showModal() {
     modal.classList.add('animate-fade-in');
 
     // 简单的礼花效果
-    createConfetti();
+  createConfet();
 }
 
 // 关闭弹窗
@@ -192,6 +184,9 @@ function closeModal() {
     const modal = document.getElementById('modal');
     modal.classList.add('hidden');
     modal.classList.remove('animate-fade-in');
+    
+    // 确保按钮保持不可点击状态
+    resetButton();
 }
 
 // 创建礼花效果
