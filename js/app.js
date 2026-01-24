@@ -74,7 +74,8 @@ class LotteryApp {
             lotteryBtn: document.getElementById('lotteryBtn'),
             btnText: document.getElementById('btnText'),
             modal: document.getElementById('modal'),
-            modalBackdrop: document.getElementById('modalBackdrop')
+            modalBackdrop: document.getElementById('modalBackdrop'),
+            modalConfirmBtn: document.getElementById('modalConfirmBtn')
         };
         
         // 验证关键元素是否存在
@@ -101,6 +102,11 @@ class LotteryApp {
         // 绑定弹窗背景点击事件
         if (this._elements.modalBackdrop) {
             this._elements.modalBackdrop.addEventListener('click', () => this._closeModal());
+        }
+        
+        // 绑定弹窗确认按钮点击事件
+        if (this._elements.modalConfirmBtn) {
+            this._elements.modalConfirmBtn.addEventListener('click', () => this._closeModal());
         }
         
         // 绑定ESC键关闭弹窗
