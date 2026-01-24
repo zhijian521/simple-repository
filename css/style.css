@@ -1,34 +1,111 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+/**
+ * 翔迅科技年会抽奖 - 样式表
+ * @version 2.0.0
+ * @author 翔迅科技
+ */
 
+/* ==================== CSS 变量 ==================== */
 :root {
-    --cyan-glow: #00f2ff;
-    --space-dark: #0d1b2a;
-    --space-navy: #1b263b;
+    /* 主色调 */
+    --color-cyan-primary: #22d3ee;
+    --color-cyan-secondary: #06b6d4;
+    --color-cyan-glow: #00f2ff;
+    --color-blue-primary: #3b82f6;
+    --color-blue-secondary: #2563eb;
+    
+    /* 背景色 */
+    --bg-space-dark: #0d1b2a;
+    --bg-space-navy: #1b263b;
+    --bg-overlay: rgba(13, 27, 42, 0.8);
+    
+    /* 文字颜色 */
+    --text-white: #ffffff;
+    --text-white-90: rgba(255, 255, 255, 0.9);
+    --text-white-80: rgba(255, 255, 255, 0.8);
+    --text-white-60: rgba(255, 255, 255, 0.6);
+    --text-white-40: rgba(255, 255, 255, 0.4);
+    --text-white-20: rgba(255, 255, 255, 0.2);
+    
+    /* 边框颜色 */
+    --border-cyan-primary: rgba(34, 211, 238, 0.2);
+    --border-cyan-secondary: rgba(34, 211, 238, 0.1);
+    --border-cyan-hover: rgba(34, 211, 238, 0.4);
+    --border-white: rgba(255, 255, 255, 0.05);
+    --border-white-hover: rgba(255, 255, 255, 0.1);
+    
+    /* 阴影 */
+    --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    --shadow-button: 0 20px 40px rgba(6, 182, 212, 0.3);
+    --shadow-glow: 0 0 20px rgba(34, 211, 238, 0.2);
+    
+    /* 动画时间 */
+    --duration-fast: 150ms;
+    --duration-normal: 300ms;
+    --duration-slow: 1000ms;
+    --duration-orbit: 30s;
+    --duration-pulse: 15s;
+    
+    /* 缓动函数 */
+    --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* 间距 */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
 }
 
-* {
+/* ==================== 基础重置 ==================== */
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: 'Inter', -apple-system, 'Microsoft YaHei', sans-serif;
-    background-color: var(--space-dark);
+    font-family: 'Inter', -apple-system, 'Microsoft YaHei', 'Segoe UI', 'PingFang SC', sans-serif;
+    background-color: var(--bg-space-dark);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
-    color: #ffffff;
+    color: var(--text-white);
     overflow: hidden;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.font-mono { 
-    font-family: 'JetBrains Mono', monospace; 
+/* ==================== 字体类 ==================== */
+.font-mono {
+    font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
 }
 
-/* 动态背景星空 */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+/* ==================== 背景效果 ==================== */
+
+/* 动态星空背景 */
 .stars-overlay {
     position: fixed;
     inset: 0;
@@ -39,30 +116,42 @@ body {
     background-position: 0 0, 30px 30px;
     opacity: 0.1;
     z-index: 0;
+    pointer-events: none;
+    will-change: transform;
 }
 
 /* 旋转轨道 */
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
 .orbit-ring {
     position: absolute;
-    border: 1px dashed rgba(34, 211, 238, 0.2);
+    border: 1px dashed var(--border-cyan-secondary);
     border-radius: 50%;
-    animation: rotate 30s linear infinite;
+    animation: rotate var(--duration-orbit) linear infinite;
+    will-change: transform;
+    pointer-events: none;
 }
 
-/* 玻璃拟态卡片 */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==================== 卡片样式 ==================== */
+
+/* 科技感卡片 */
 .tech-card {
     background: rgba(27, 38, 59, 0.4);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(34, 211, 238, 0.15);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-cyan-primary);
+    box-shadow: var(--shadow-card);
+    will-change: transform;
 }
 
-/* 扫描动画 */
+/* 扫描动画效果 */
 .scanner::after {
     content: "";
     position: absolute;
@@ -73,36 +162,37 @@ body {
     animation: scan 4s linear infinite;
     z-index: 5;
     pointer-events: none;
+    will-change: top;
 }
 
 @keyframes scan {
-    0% { top: -20%; }
-    100% { top: 120%; }
+    0% {
+        top: -20%;
+    }
+    100% {
+        top: 120%;
+    }
 }
 
+/* 慢速旋转 */
 .animate-spin-slow {
-    animation: rotate 15s linear infinite;
+    animation: rotate var(--duration-pulse) linear infinite;
+    will-change: transform;
 }
 
-/* 加载动画 */
-@keyframes pulse-ring {
-    0% { transform: scale(0.8); opacity: 1; }
-    100% { transform: scale(1.3); opacity: 0; }
-}
+/* ==================== 按钮样式 ==================== */
 
-.pulse-ring {
-    animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-}
-
-/* 按钮效果 */
+/* 主按钮 */
 .btn-primary {
-    background: linear-gradient(135deg, #06b6d4 0%, #2563eb 100%);
+    background: linear-gradient(135deg, var(--color-cyan-secondary) 0%, var(--color-blue-secondary) 100%);
+    will-change: transform, background;
+    transition: all var(--duration-normal) var(--ease-in-out);
 }
 
 .btn-primary:hover:not(:disabled) {
-    background: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
+    background: linear-gradient(135deg, var(--color-cyan-primary) 0%, var(--color-blue-primary) 100%);
     transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(6, 182, 212, 0.3);
+    box-shadow: var(--shadow-button);
 }
 
 .btn-primary:active:not(:disabled) {
@@ -113,43 +203,163 @@ body {
     background: rgba(59, 130, 246, 0.3);
     cursor: not-allowed;
     opacity: 0.6;
+    will-change: auto;
 }
 
-/* 弹窗动画 */
+/* ==================== 弹窗动画 ==================== */
+
+/* 淡入动画 */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes scaleIn {
-    from { transform: scale(0.9); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
+    animation: fadeIn var(--duration-normal) var(--ease-out);
+    will-change: opacity;
+}
+
+/* 缩放进入动画 */
+@keyframes scaleIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .animate-scale-in {
-    animation: scaleIn 0.3s ease-out;
+    animation: scaleIn var(--duration-normal) var(--ease-out);
+    will-change: transform, opacity;
 }
 
-/* 消息提示 */
+/* ==================== 消息提示 ==================== */
+
 .message-error {
     background: rgba(239, 68, 68, 0.1);
     border: 1px solid rgba(239, 68, 68, 0.3);
     color: #fca5a5;
+    will-change: opacity, transform;
 }
 
 .message-success {
     background: rgba(34, 197, 94, 0.1);
     border: 1px solid rgba(34, 197, 94, 0.3);
     color: #86efac;
+    will-change: opacity, transform;
 }
 
-/* 响应式 */
+/* ==================== 加载动画 ==================== */
+
+@keyframes pulse-ring {
+    0% {
+        transform: scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.3);
+        opacity: 0;
+    }
+}
+
+.pulse-ring {
+    animation: pulse-ring 1.5s var(--ease-out) infinite;
+    will-change: transform, opacity;
+}
+
+/* ==================== 响应式设计 ==================== */
+
+/* 小屏幕设备 */
 @media (max-width: 480px) {
     body {
         padding: 16px;
+    }
+    
+    .tech-card {
+        border-radius: 1rem;
+    }
+}
+
+/* 中等屏幕设备 */
+@media (min-width: 481px) and (max-width: 768px) {
+    body {
+        padding: 24px;
+    }
+}
+
+/* 大屏幕设备 */
+@media (min-width: 769px) {
+    body {
+        padding: 32px;
+    }
+}
+
+/* ==================== 性能优化 ==================== */
+
+/* 减少重绘 */
+.tech-card,
+.orbit-ring,
+.scanner::after,
+.animate-spin-slow {
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* GPU加速 */
+.stars-overlay,
+.orbit-ring,
+.animate-spin-slow,
+.animate-scale-in {
+    transform: translateZ(0);
+}
+
+/* 优化图片渲染 */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* ==================== 辅助功能 ==================== */
+
+/* 焦点可见性 - 改进对比度 */
+:focus-visible {
+    outline: 2px solid var(--color-cyan-primary);
+    outline-offset: 2px;
+}
+
+/* 减少动画 - 用户偏好设置 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* 深色模式优化 */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-cyan-primary: #22d3ee;
+        --bg-space-dark: #0d1b2a;
+    }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+    .tech-card {
+        border: 2px solid var(--color-cyan-primary);
+    }
+    
+    .btn-primary {
+        border: 2px solid var(--text-white);
     }
 }
