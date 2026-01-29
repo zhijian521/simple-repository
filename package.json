@@ -1,0 +1,27 @@
+{
+  "name": "image-hub",
+  "version": "2.0.0",
+  "description": "图片仓库Web应用 - 上传图片并同步到GitHub",
+  "type": "module",
+  "main": "dist/api/index.js",
+  "scripts": {
+    "dev": "npm run build && node server.js",
+    "build": "npm run build:server",
+    "build:server": "tsc -p tsconfig.build.json",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "start": "node server.js",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/busboy": "^1.5.4",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.2",
+    "vercel": "^37.0.0"
+  }
+}
