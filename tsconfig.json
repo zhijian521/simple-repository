@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "module": "NodeNext",
-    "lib": ["ES2022"],
-    "moduleResolution": "NodeNext",
+    "module": "ES2022",
+    "lib": ["ES2022", "ESNext", "DOM", "DOM.Iterable"],
+    "moduleResolution": "Bundler",
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -14,24 +14,12 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "outDir": "./dist",
-    "rootDir": "./",
-    "baseUrl": "./",
+    "types": ["node"],
     "paths": {
-      "@server/*": ["src/server/*"],
-      "@client/*": ["src/client/*"],
-      "@config/*": ["src/config/*"]
-    },
-    "types": ["node"]
+      "~/*": ["./*"],
+      "@/*": ["./*"],
+      "~/types": ["./types/index.ts"]
+    }
   },
-  "include": [
-    "src/**/*",
-    "api/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "tests",
-    "public"
-  ]
+  "extends": "./.nuxt/tsconfig.json"
 }

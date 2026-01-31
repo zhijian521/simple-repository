@@ -1,51 +1,71 @@
-# Image Hub
+# 资源仓库 (Resource Hub)
 
-图片仓库 Web 应用 - 上传图片并自动同步到 GitHub。
+资源仓库 Web 应用 - 上传文件并自动同步到 GitHub。
+
+使用 Nuxt 3 + TypeScript + Vercel Serverless Functions 构建。
+
+当前版本支持图片管理，后续将扩展支持更多文件类型。
 
 ## 技术栈
 
-- **前端**: HTML + CSS + TypeScript
-- **后端**: Node.js + TypeScript + Vercel Serverless Functions
+- **框架**: Nuxt 3
+- **语言**: TypeScript
+- **UI**: Vue 3 Composition API
+- **部署**: Vercel
 - **存储**: GitHub API
-- **认证**: JWT
+- **认证**: JWT + HttpOnly Cookie
 
 ## 项目结构
 
 ```
-simple-repository/
-├── api/                    # API 路由（TypeScript）
-│   ├── auth/
-│   │   └── login.ts       # 登录 API
-│   └── images/
-│       ├── index.ts       # 图片列表
-│       └── upload.ts      # 图片上传
-│
-├── src/                    # 源代码
-│   └── server/
-│       ├── middleware/    # 中间件层
-│       │   ├── compose.ts       # 中间件组合器
-│       │   ├── errorHandler.ts  # 错误处理
-│       │   ├── logger.ts        # 结构化日志
-│       │   ├── cors.ts          # CORS 处理
-│       │   └── auth.ts          # 认证中间件
-│       │
-│       ├── services/       # 业务逻辑层
-│       │   ├── auth.service.ts   # 认证服务
-│       │   ├── cache.service.ts  # 缓存服务
-│       │   ├── github.service.ts # GitHub API
-│       │   └── image.service.ts  # 图片业务逻辑
-│       │
-│       └── utils/          # 工具函数
-│           └── multipart.ts # Multipart 解析
-│
-├── public/                 # 静态资源
-│   └── index.html         # 前端页面
-│
+resource-hub/
+├── server/                 # 服务端
+│   ├── api/               # API 路由
+│   │   ├── auth/
+│   │   │   └── login.post.ts
+│   │   └── images/
+│   │       ├── index.get.ts
+│   │       └── upload.post.ts
+│   ├── middleware/        # 服务端中间件
+│   ├── services/          # 业务逻辑层
+│   └── utils/             # 工具函数
+├── composables/           # 组合式函数
+│   ├── useAuth.ts
+│   └── useImage.ts
+├── components/            # Vue 组件
+│   ├── LoginModal.vue
+│   ├── UploadZone.vue
+│   ├── ImageGrid.vue
+│   └── ImageModal.vue
+├── pages/                 # 页面路由
+│   └── index.vue
+├── assets/                # 静态资源
+│   └── css/
+│       └── main.css
+├── types/                 # TypeScript 类型
+│   └── index.ts
+├── nuxt.config.ts         # Nuxt 配置
 ├── .env.example           # 环境变量示例
-├── package.json           # 项目配置
-├── tsconfig.json          # TypeScript 配置
 └── vercel.json            # Vercel 部署配置
 ```
+
+## 功能特性
+
+### 当前功能 ✅
+- 用户认证（JWT + HttpOnly Cookie）
+- 图片上传（拖拽 + 点击）
+- 图片列表展示
+- 图片预览弹窗
+- 缓存机制（5 分钟）
+- 响应式设计
+
+### 计划功能 🔜
+- [ ] 支持更多文件类型（PDF、文档、视频等）
+- [ ] 文件分类管理
+- [ ] 批量操作
+- [ ] 搜索和筛选
+- [ ] 文件分享功能
+- [ ] Dark Mode
 
 ## 快速开始
 
@@ -63,21 +83,7 @@ npm install
 cp .env.example .env
 ```
 
-编辑 `.env` 文件：
-
-```bash
-# GitHub API 配置
-GITHUB_TOKEN=your_github_token_here
-GITHUB_OWNER=your_github_username_here
-GITHUB_REPO=your_repository_name_here
-GITHUB_BRANCH=main
-
-# 身份验证配置
-AUTH_USERNAME=admin
-AUTH_PASSWORD=your_password_here
-JWT_SECRET=your_jwt_secret_key_here
-TOKEN_EXPIRY_DAYS=7
-```
+编辑 `.env` 文件，填写你的 GitHub 配置和认证信息。
 
 ### 3. 本地开发
 
@@ -87,16 +93,70 @@ npm run dev
 
 访问 http://localhost:3000
 
-### 4. 构建
+### 4. 构建生产版本
 
 ```bash
 npm run build
 ```
 
-### 5. 部署到 Vercel
+### 5. 预览生产版本
 
 ```bash
-npm run deploy
+npm run preview
+```
+
+## 部署到 Vercel
+
+### 方法 1: 通过 Vercel CLI
+
+```bash
+# 安装 Vercel CLI
+npm i -g vercel
+
+# 登录
+vercel login
+
+# 部署
+vercel
+
+# 生产环境部署
+vercel --prod
+```
+
+### 方法 2: 通过 GitHub 集成（推荐）
+
+1. 将代码推送到 GitHub
+2. 在 Vercel 中导入项目
+3. 在 Vercel 控制台设置环境变量：
+   - `NUXT_GITHUB_TOKEN`
+   - `NUXT_GITHUB_OWNER`
+   - `NUXT_GITHUB_REPO`
+   - `NUXT_GITHUB_BRANCH`（可选）
+   - `NUXT_AUTH_USERNAME`
+   - `NUXT_AUTH_PASSWORD`
+   - `NUXT_JWT_SECRET`
+   - `NUXT_TOKEN_EXPIRY_DAYS`（可选）
+4. 自动部署
+
+### 环境变量配置
+
+在 Vercel 控制台设置环境变量：
+
+```
+Settings → Environment Variables → Add New
+```
+
+添加以下变量（不要包含 `NUXT_` 前缀）：
+
+```
+GITHUB_TOKEN=your_github_token
+GITHUB_OWNER=your_username
+GITHUB_REPO=your_repo
+GITHUB_BRANCH=main
+AUTH_USERNAME=admin
+AUTH_PASSWORD=your_password
+JWT_SECRET=your_jwt_secret
+TOKEN_EXPIRY_DAYS=7
 ```
 
 ## API 端点
@@ -161,43 +221,66 @@ npm run deploy
 
 ## 核心特性
 
-### 中间件架构
+### Nuxt 3 特性
 
-- **错误处理**: 统一的错误处理和响应格式
-- **日志记录**: 结构化日志，包含请求追踪 ID
-- **CORS**: 自动处理跨域请求
-- **认证**: JWT Token 验证，支持多种传递方式
+- **服务端 API**: 使用 Nitro server routes
+- **组合式函数**: useAuth、useImage 状态管理
+- **自动导入**: 组件、composables 自动导入
+- **类型安全**: 完整 TypeScript 支持
+- **文件上传**: 内置 FormData 处理
 
-### 服务层
+### 组件化
 
-- **GitHub 服务**: 封装 GitHub API 操作
-- **缓存服务**: 内存缓存，提升性能
-- **图片服务**: 图片业务逻辑
-- **认证服务**: JWT Token 生成和验证
+- **LoginModal**: 登录弹窗
+- **UploadZone**: 拖拽上传区域
+- **ImageGrid**: 图片展示网格
+- **ImageModal**: 图片预览弹窗
 
-### 性能优化
+### 安全性
 
-- 图片列表缓存（5 分钟）
-- 请求日志追踪
-- 错误分类处理
+- HttpOnly Cookie 存储 JWT
+- 服务端 Token 验证
+- CORS 配置
+- 文件类型验证
 
 ## 开发脚本
 
 ```bash
 npm run dev          # 启动开发服务器
-npm run build        # 构建项目
-npm run type-check   # TypeScript 类型检查
-npm run clean        # 清理构建产物
-npm run deploy       # 部署到 Vercel
+npm run build        # 构建生产版本
+npm run preview      # 预览生产版本
+npm run typecheck    # TypeScript 类型检查
 ```
 
-## 安全注意事项
+## 注意事项
 
 ⚠️ **重要**:
 - 不要将 `.env` 文件提交到 Git
 - 在生产环境使用强密码和随机 JWT Secret
-- 建议使用密码哈希而非明文存储
 - GitHub Token 需要 `repo` 权限
+- 建议使用密码哈希而非明文存储（待优化）
+
+## 路线图
+
+### v1.1 - 文件类型扩展
+- [ ] 支持 PDF 文件
+- [ ] 支持文档文件（Word、Excel、PPT）
+- [ ] 支持视频文件
+- [ ] 支持音频文件
+- [ ] 文件类型图标
+
+### v1.2 - 管理功能
+- [ ] 文件重命名
+- [ ] 批量删除
+- [ ] 文件移动/复制
+- [ ] 文件夹管理
+
+### v1.3 - 用户体验
+- [ ] Dark Mode
+- [ ] 文件预览（PDF、视频等）
+- [ ] 搜索功能
+- [ ] 标签系统
+- [ ] 分享链接
 
 ## 许可证
 

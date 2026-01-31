@@ -1,27 +1,31 @@
 {
-  "name": "image-hub",
-  "version": "2.0.0",
-  "description": "图片仓库Web应用 - 上传图片并同步到GitHub",
+  "name": "resource-hub",
+  "version": "1.0.0",
+  "description": "资源仓库 - 上传文件并同步到 GitHub",
   "type": "module",
-  "main": "dist/api/index.js",
+  "private": true,
   "scripts": {
-    "dev": "npm run build && node server.js",
-    "build": "npm run build:server",
-    "build:server": "tsc -p tsconfig.build.json",
-    "type-check": "tsc --noEmit",
-    "clean": "rm -rf dist",
-    "start": "node server.js",
-    "deploy": "vercel --prod"
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "preview": "nuxt preview",
+    "typecheck": "nuxt typecheck",
+    "generate": "nuxt generate"
   },
   "dependencies": {
+    "@vueuse/core": "^14.2.0",
+    "bcrypt": "^6.0.0",
     "busboy": "^1.6.0",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "nuxt": "^3.15.1",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/busboy": "^1.5.4",
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/node": "^20.10.0",
-    "typescript": "^5.3.2",
-    "vercel": "^37.0.0"
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3",
+    "vue-tsc": "^2.2.0"
   }
 }
