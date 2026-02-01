@@ -42,6 +42,8 @@ const handleLogout = () => {
     </main>
 
     <LoginModal />
+    <ConfirmDialog />
+    <Toast />
   </div>
 </template>
 

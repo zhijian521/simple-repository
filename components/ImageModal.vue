@@ -20,7 +20,6 @@ const formatDate = (timestamp: number): string => {
   return new Date(timestamp).toLocaleString('zh-CN')
 }
 
-// ESC 键关闭
 onKeyStroke('Escape', () => {
   emit('close')
 })

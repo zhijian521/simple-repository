@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import type { ImageInfo } from '~/types'
-const { images, loading, fetchImages } = useImage()
+const { images, loading, fetchImages, deleteImage } = useImage()
 const { isLoggedIn } = useAuth()
+const { confirm } = useConfirmDialog()
+const { error } = useToast()
 const selectedImage = ref<ImageInfo | null>(null)
 const hasLoaded = ref(false)
+const activeMenuSha = ref<string | null>(null)
 
 watch(isLoggedIn, (loggedIn) => {
   if (loggedIn && !hasLoaded.value) {
@@ -19,9 +22,45 @@ const formatSize = (bytes: number): string => {
 }
 
 const getThumbnailUrl = (url: string): string => {
-  // 使用 weserv.nl 生成缩略图
   return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=400&h=400&fit=cover&q=80`
 }
+
+const toggleMenu = (sha: string, event: Event) => {
+  event.stopPropagation()
+  activeMenuSha.value = activeMenuSha.value === sha ? null : sha
+}
+
+const closeMenu = () => {
+  activeMenuSha.value = null
+}
+
+const handleDelete = async (image: ImageInfo) => {
+  const confirmed = await confirm('确认删除', `确定要删除图片 "${image.name}" 吗？`, '确认删除')
+  if (!confirmed) return
+
+  try {
+    await deleteImage(image)
+  } catch (e) {
+    error('删除失败: ' + (e as Error).message)
+  }
+  closeMenu()
+}
+
+const handleImageClick = (img: ImageInfo) => {
+  if (!activeMenuSha.value) {
+    selectedImage.value = img
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement
+    if (!target.closest('.context-menu') && !target.closest('.more-btn')) {
+      closeMenu()
+    }
+  })
+})
+
 </script>
 
 <template>
@@ -53,7 +92,7 @@ const getThumbnailUrl = (url: string): string => {
         v-for="img in images"
         :key="img.sha"
         class="image-item"
-        @click="selectedImage = img"
+        @click="handleImageClick(img)"
       >
         <img
           :src="getThumbnailUrl(img.url)"
@@ -63,6 +102,19 @@ const getThumbnailUrl = (url: string): string => {
         <div class="image-meta">
           <div class="image-name">{{ img.name }}</div>
           <div class="image-size">{{ formatSize(img.size) }}</div>
+        </div>
+
+        <button class="more-btn" @click="toggleMenu(img.sha, $event)">
+          •••
+        </button>
+
+        <div v-if="activeMenuSha === img.sha" class="context-menu" @click.stop>
+          <div class="menu-item" @click="selectedImage = img; closeMenu()">
+            查看大图
+          </div>
+          <div class="menu-item danger" @click="handleDelete(img)">
+            删除图片
+          </div>
         </div>
       </div>
     </div>
@@ -158,6 +210,69 @@ const getThumbnailUrl = (url: string): string => {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.75rem;
   margin-top: 2px;
+}
+
+.more-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  opacity: 0;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.image-item:hover .more-btn {
+  opacity: 1;
+}
+
+.more-btn:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.context-menu {
+  position: absolute;
+  top: 44px;
+  right: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 6px;
+  min-width: 140px;
+  z-index: 100;
+}
+
+.menu-item {
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  color: var(--text-primary, #1d1d1f);
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.menu-item:hover {
+  background: var(--bg-tertiary, #f0f0f2);
+}
+
+.menu-item.danger {
+  color: var(--accent-red, #ff3b30);
+}
+
+.menu-item.danger:hover {
+  background: rgba(255, 59, 48, 0.1);
 }
 
 .loading-grid {

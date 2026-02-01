@@ -91,6 +91,10 @@ export const ERROR_MESSAGES = {
   FILE_TOO_LARGE: '文件大小超过限制',
   FILE_VALIDATION_FAILED: '文件验证失败',
 
+  // 文件删除相关
+  DELETE_FAILED: '删除图片失败',
+  FILE_NOT_FOUND: '文件不存在',
+
   // 通用错误
   INTERNAL_ERROR: '服务器内部错误',
   NOT_FOUND: '资源不存在',

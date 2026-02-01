@@ -111,6 +111,12 @@ class ImageService {
   async invalidateCache() {
     await cacheService.deletePattern(`${this.cachePrefix}*`)
   }
+
+  async deleteImage(path: string, sha: string): Promise<void> {
+    const github = new GitHubService()
+    await github.deleteFile(path, sha)
+    await this.invalidateCache()
+  }
 }
 
 export default new ImageService()

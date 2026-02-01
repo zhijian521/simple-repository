@@ -73,6 +73,28 @@ class GitHubService {
     return Array.isArray(result) ? result : [result]
   }
 
+  async deleteFile(path: string, sha: string): Promise<void> {
+    const url = `${this.baseUrl}/repos/${this.owner}/${this.repo}/contents/${path}`
+
+    const response = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        ...this.getHeaders(),
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: `Delete: ${path}`,
+        sha,
+        branch: this.branch,
+      }),
+    })
+
+    if (!response.ok) {
+      const error = await response.json() as { message: string }
+      throw new Error(`GitHub delete failed: ${error.message}`)
+    }
+  }
+
   generateUniqueFilename(originalName: string): string {
     const timestamp = Date.now()
     const randomStr = Math.random().toString(36).substring(2, 8)

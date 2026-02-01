@@ -61,11 +61,33 @@ export const useImage = () => {
     }
   }
 
+  const deleteImage = async (image: ImageInfo) => {
+    loading.value = true
+    error.value = null
+
+    try {
+      await $fetch(`/api/images/${encodeURIComponent(image.path)}`, {
+        method: 'DELETE',
+        headers: {
+          'x-file-sha': image.sha,
+        },
+      })
+
+      images.value = images.value.filter(img => img.sha !== image.sha)
+    } catch (e: any) {
+      error.value = e.message
+      throw e
+    } finally {
+      loading.value = false
+    }
+  }
+
   return {
     images,
     loading,
     error,
     fetchImages,
     uploadImages,
+    deleteImage,
   }
 }
