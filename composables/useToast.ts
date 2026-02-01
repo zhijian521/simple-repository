@@ -1,44 +1,31 @@
-const toast = ref<{
-  show: boolean
-  message: string
-  type: 'success' | 'error'
-}>({
-  show: false,
-  message: '',
-  type: 'success'
-})
-
-let toastTimer: ReturnType<typeof setTimeout> | null = null
+import { message } from 'ant-design-vue'
 
 export const useToast = () => {
-  const show = (message: string, type: 'success' | 'error' = 'success') => {
-    toast.value = {
-      show: true,
-      message,
-      type
-    }
-
-    if (toastTimer) {
-      clearTimeout(toastTimer)
-    }
-
-    toastTimer = setTimeout(() => {
-      toast.value.show = false
-    }, 3000)
+  const show = (msg: string, type: 'success' | 'error' | 'info' | 'warning' = 'success') => {
+    message[type](msg)
   }
 
-  const success = (message: string) => {
-    show(message, 'success')
+  const success = (msg: string) => {
+    message.success(msg)
   }
 
-  const error = (message: string) => {
-    show(message, 'error')
+  const error = (msg: string) => {
+    message.error(msg)
+  }
+
+  const info = (msg: string) => {
+    message.info(msg)
+  }
+
+  const warning = (msg: string) => {
+    message.warning(msg)
   }
 
   return {
-    toast,
     show,
     success,
     error,
+    info,
+    warning,
   }
 }

@@ -12,7 +12,10 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@ant-design-vue/nuxt": "^1.4.6",
+    "@ant-design/icons-vue": "^7.0.1",
     "@vueuse/core": "^14.2.0",
+    "ant-design-vue": "^4.2.6",
     "bcrypt": "^6.0.0",
     "busboy": "^1.6.0",
     "jsonwebtoken": "^9.0.2",
