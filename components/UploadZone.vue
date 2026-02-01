@@ -1,8 +1,5 @@
 <script setup lang="ts">
 const { uploadImages } = useImage()
-const emit = defineEmits<{
-  uploaded: []
-}>()
 
 const dragging = ref(false)
 const uploading = ref(false)
@@ -62,8 +59,6 @@ const uploadFiles = async (files: File[]) => {
 
     clearInterval(progressInterval)
     progress.value = 100
-
-    emit('uploaded')
 
     setTimeout(() => {
       uploading.value = false

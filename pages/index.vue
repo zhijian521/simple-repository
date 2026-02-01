@@ -2,10 +2,6 @@
 const { logout } = useAuth()
 const { fetchImages } = useImage()
 
-const handleUploadComplete = () => {
-  fetchImages()
-}
-
 const handleLogout = () => {
   logout()
 }
@@ -39,7 +35,7 @@ const handleLogout = () => {
       </div>
 
       <section class="upload-section">
-        <UploadZone @uploaded="handleUploadComplete" />
+        <UploadZone />
       </section>
 
       <ImageGrid />

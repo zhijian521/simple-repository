@@ -1,10 +1,10 @@
 import type { ImageInfo } from '~/types'
 
-export const useImage = () => {
-  const images = ref<ImageInfo[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+const images = ref<ImageInfo[]>([])
+const loading = ref(false)
+const error = ref<string | null>(null)
 
+export const useImage = () => {
   const fetchImages = async () => {
     loading.value = true
     error.value = null
@@ -50,8 +50,7 @@ export const useImage = () => {
         throw new Error('上传失败')
       }
 
-      // 上传成功后刷新列表
-      await fetchImages()
+      images.value = [...data.uploaded, ...images.value]
 
       return data
     } catch (e: any) {
