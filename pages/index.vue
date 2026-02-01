@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {
-  SettingOutlined, BellOutlined, QuestionCircleOutlined,
+  PictureOutlined, SettingOutlined, BellOutlined, QuestionCircleOutlined,
   UserOutlined, ReloadOutlined, LogoutOutlined, HomeOutlined,
   FolderOutlined, DownOutlined, MenuFoldOutlined, MenuUnfoldOutlined,
 } from '@ant-design/icons-vue'
@@ -48,13 +48,22 @@ const handleDeleteImage = async (image: any) => {
         mode="inline"
         class="menu"
       >
-        <a-menu-item key="home"><HomeOutlined />首页</a-menu-item>
+        <a-menu-item key="home">
+          <template #icon><HomeOutlined /></template>
+          首页
+        </a-menu-item>
         <a-sub-menu key="resources">
           <template #icon><FolderOutlined /></template>
           <template #title>资源管理</template>
-          <a-menu-item key="images">图片管理</a-menu-item>
+          <a-menu-item key="images">
+            <template #icon><PictureOutlined /></template>
+            图片管理
+          </a-menu-item>
         </a-sub-menu>
-        <a-menu-item key="settings"><SettingOutlined />系统设置</a-menu-item>
+        <a-menu-item key="settings">
+          <template #icon><SettingOutlined /></template>
+          系统设置
+        </a-menu-item>
       </a-menu>
     </a-layout-sider>
 
@@ -76,13 +85,16 @@ const handleDeleteImage = async (image: any) => {
             <a-button type="text" shape="circle"><QuestionCircleOutlined /></a-button>
             <a-dropdown>
               <a-space class="user-info">
-                <a-avatar :size="32"><UserOutlined /></a-avatar>
+                <a-avatar :size="28"><UserOutlined /></a-avatar>
                 <span class="username">管理员</span>
-                <DownOutlined style="font-size: 12px;" />
+                <DownOutlined class="dropdown-arrow" />
               </a-space>
               <template #overlay>
-                <a-menu>
-                  <a-menu-item @click="logout"><LogoutOutlined />退出登录</a-menu-item>
+                <a-menu class="user-menu">
+                  <a-menu-item @click="logout">
+                    <template #icon><LogoutOutlined /></template>
+                    退出登录
+                  </a-menu-item>
                 </a-menu>
               </template>
             </a-dropdown>
@@ -127,13 +139,30 @@ const handleDeleteImage = async (image: any) => {
 </template>
 
 <style scoped>
-.layout { min-height: 100vh; }
+.layout { 
+  height: 100vh;
+  overflow: hidden;
+}
 
-/* 浅色侧边栏样式 */
+/* 浅色侧边栏样式 - 固定不滚动 */
 .sider {
   background: #fff !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   z-index: 10;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sider :deep(.ant-layout-sider-children) {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sider :deep(.ant-menu) {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sider :deep(.ant-layout-sider-children) {
@@ -217,8 +246,9 @@ const handleDeleteImage = async (image: any) => {
 
 .user-info { 
   cursor: pointer; 
-  padding: 4px 8px; 
+  padding: 6px 12px; 
   border-radius: 4px; 
+  align-items: center;
 }
 
 .user-info:hover { 
@@ -227,12 +257,35 @@ const handleDeleteImage = async (image: any) => {
 
 .username { 
   font-size: 14px; 
-  color: rgba(0, 0, 0, 0.65); 
+  color: rgba(0, 0, 0, 0.65);
+  margin-left: 8px;
 }
 
-/* Content */
+.dropdown-arrow {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  margin-left: 4px;
+}
+
+/* Header 下拉菜单样式 - 与侧边栏保持一致 */
+.user-menu :deep(.ant-menu-item) {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  line-height: 40px;
+  padding: 0 16px;
+  gap: 10px;
+}
+
+.user-menu :deep(.ant-menu-item .anticon) {
+  font-size: 14px;
+}
+
+/* 右侧内容区域 - 可滚动 */
 .content { 
   margin: 24px; 
+  overflow-y: auto;
+  height: calc(100vh - 64px);
 }
 
 .page-header { 
