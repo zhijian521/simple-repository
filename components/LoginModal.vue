@@ -17,7 +17,6 @@ const handleLogin = async () => {
 
   try {
     await login(username.value, password.value)
-    // 登录成功后清空表单
     username.value = ''
     password.value = ''
   } catch (e: any) {

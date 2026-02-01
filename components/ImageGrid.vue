@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import type { ImageInfo } from '~/types'
 const { images, loading, fetchImages } = useImage()
+const { isLoggedIn } = useAuth()
 const selectedImage = ref<ImageInfo | null>(null)
+const hasLoaded = ref(false)
 
-onMounted(() => {
-  console.log('ImageGrid mounted, 开始获取图片')
-  fetchImages()
-})
-
-// 监听 images 变化
-watch(images, (newImages) => {
-  console.log('images 变化:', newImages.length, '张')
-}, { deep: true })
+watch(isLoggedIn, (loggedIn) => {
+  if (loggedIn && !hasLoaded.value) {
+    fetchImages()
+    hasLoaded.value = true
+  }
+}, { immediate: true })
 
 const formatSize = (bytes: number): string => {
   if (bytes < 1024) return bytes + ' B'
