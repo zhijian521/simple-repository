@@ -1,7 +1,7 @@
 import AuthService from '~/server/services/auth.service'
 import type { LoginResponse } from '~/types'
-import { COOKIE_CONFIG, ERROR_MESSAGES } from '~/server/config/constants'
-import { rateLimiter, RATE_LIMIT_CONFIG, getClientIP } from '~/server/utils/rateLimit'
+import { COOKIE_CONFIG, ERROR_MESSAGES, RATE_LIMIT_CONFIG } from '~/server/config/constants'
+import { rateLimiter, getClientIP } from '~/server/utils/rateLimit'
 
 export default defineEventHandler(async (event) => {
   // 应用速率限制
@@ -49,13 +49,12 @@ export default defineEventHandler(async (event) => {
 
   const token = authService.generateToken()
 
-  // 设置 Cookie（同时支持服务端和客户端）
   setCookie(event, COOKIE_CONFIG.NAME, token, {
-    httpOnly: false, // 客户端需要访问以检查登录状态
-    secure: false, // 开发环境设为 false，生产环境由 Vercel 自动处理 HTTPS
-    sameSite: 'lax', // 使用 lax 以便在导航时保持登录状态
+    httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: COOKIE_CONFIG.MAX_AGE,
-    path: '/',
+    path: COOKIE_CONFIG.PATH,
   })
 
   const response: LoginResponse = {

@@ -16,16 +16,12 @@ export const useImage = () => {
         images: ImageInfo[]
       }>('/api/images')
 
-      console.log('获取图片数据:', data)
-
       if (!data?.success) {
         throw new Error('获取图片列表失败')
       }
 
       images.value = data.images
-      console.log('设置 images:', images.value.length, '张')
     } catch (e: any) {
-      console.error('获取图片失败:', e)
       error.value = e.message
     } finally {
       loading.value = false

@@ -1,9 +1,10 @@
 import type { LoginResponse } from '~/types'
+import { COOKIE_CONFIG } from '~/server/config/constants'
 
 export const useAuth = () => {
-  const token = useCookie('auth_token', {
-    maxAge: 60 * 60 * 24 * 7, // 7 天
-    sameSite: 'strict',
+  const token = useCookie(COOKIE_CONFIG.NAME, {
+    maxAge: COOKIE_CONFIG.MAX_AGE,
+    sameSite: COOKIE_CONFIG.SAME_SITE,
     httpOnly: false, // 客户端需要访问
     secure: false, // 开发环境设为 false
   })

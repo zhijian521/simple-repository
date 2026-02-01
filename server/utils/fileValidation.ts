@@ -1,11 +1,4 @@
-/**
- * 文件验证常量
- */
-export const FILE_CONSTRAINTS = {
-  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
-  MAX_FILES_COUNT: 10,
-  ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'],
-} as const
+import { FILE_CONSTRAINTS } from '~/server/config/constants'
 
 /**
  * 图片文件魔数（文件头标识）

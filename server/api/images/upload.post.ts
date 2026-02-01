@@ -1,7 +1,7 @@
 import { verifyToken } from '~/server/utils/authHelpers'
 import imageService from '~/server/services/image.service'
-import { validateImageFiles, FILE_CONSTRAINTS } from '~/server/utils/fileValidation'
-import { ERROR_MESSAGES } from '~/server/config/constants'
+import { validateImageFiles } from '~/server/utils/fileValidation'
+import { ERROR_MESSAGES, FILE_CONSTRAINTS } from '~/server/config/constants'
 
 export default defineEventHandler(async (event) => {
   // 验证 Token

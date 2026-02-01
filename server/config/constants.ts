@@ -45,6 +45,36 @@ export const UPLOAD_CONFIG = {
 } as const
 
 /**
+ * 速率限制配置
+ */
+export const RATE_LIMIT_CONFIG = {
+  // 登录接口：5次/15分钟
+  LOGIN: {
+    limit: 5,
+    windowMs: 15 * 60 * 1000,
+  },
+  // 文件上传：20次/小时
+  UPLOAD: {
+    limit: 20,
+    windowMs: 60 * 60 * 1000,
+  },
+  // 通用API：100次/分钟
+  GENERAL: {
+    limit: 100,
+    windowMs: 60 * 1000,
+  },
+} as const
+
+/**
+ * 文件约束配置
+ */
+export const FILE_CONSTRAINTS = {
+  MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
+  MAX_FILES_COUNT: 10,
+  ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'],
+} as const
+
+/**
  * 响应消息模板
  */
 export const ERROR_MESSAGES = {

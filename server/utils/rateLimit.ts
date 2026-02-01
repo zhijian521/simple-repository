@@ -1,3 +1,5 @@
+import { RATE_LIMIT_CONFIG } from '~/server/config/constants'
+
 /**
  * 简单的内存速率限制器
  * 注意：在生产环境（Vercel）中，建议使用 Upstash Redis 等外部存储
@@ -86,27 +88,6 @@ class RateLimiter {
 
 // 导出单例实例
 export const rateLimiter = new RateLimiter()
-
-/**
- * 速率限制配置
- */
-export const RATE_LIMIT_CONFIG = {
-  // 登录接口：5次/15分钟
-  LOGIN: {
-    limit: 5,
-    windowMs: 15 * 60 * 1000,
-  },
-  // 文件上传：20次/小时
-  UPLOAD: {
-    limit: 20,
-    windowMs: 60 * 60 * 1000,
-  },
-  // 通用API：100次/分钟
-  GENERAL: {
-    limit: 100,
-    windowMs: 60 * 1000,
-  },
-} as const
 
 /**
  * 获取客户端IP地址
